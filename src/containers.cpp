@@ -52,6 +52,26 @@ lc_queue lc_newqueue(lua_State *L)
   return new queue<int>();
 }
 
+int lc_queue_size(lc_queue q)
+{
+  auto q1 = static_cast<queue<int>*>(q);
+  return q1->size();
+}
+
+void lc_queue_push(lc_queue q, int e)
+{
+  auto q1 = static_cast<queue<int>*>(q);
+  q1->push(e);
+}
+
+int lc_queue_pop(lc_queue q)
+{
+  auto q1 = static_cast<queue<int>*>(q);
+  int ret = q1->front();
+  q1->pop();
+  return ret;
+}
+
 lc_stack lc_newstack(lua_State *L)
 {
   return new stack<int>();

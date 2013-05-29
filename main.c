@@ -41,11 +41,48 @@ static int set_size(lua_State *L)
   return 1;
 }
 
+static int queue_new(lua_State *L)
+{
+  lc_queue *a = lua_newuserdata(L, sizeof(lc_queue*));
+  *a = lc_newqueue(L);
+  return 1;
+}
+
+static int queue_size(lua_State *L)
+{
+  lc_queue *a = lua_touserdata(L, 1);
+  int ret = lc_queue_size(a);
+  lua_pushinteger(L, ret);
+  return 1;
+}
+
+static int queue_push(lua_State *L)
+{
+  int ref = luaL_ref(L, LUA_REGISTRYINDEX);
+  lc_queue *a = lua_touserdata(L, 1);
+  lc_queue_push(*a, ref);
+  return 0;
+}
+
+static int queue_pop(lua_State *L)
+{
+  lc_queue *a = lua_touserdata(L, 1);
+  int ret = lc_queue_pop(*a);
+  lua_rawgeti(L, LUA_REGISTRYINDEX, ret);
+  return 1;
+}
+
 static const struct luaL_Reg containerlib [] = {
   {"newset", newset},
   {"set_count", set_count},
   {"set_insert", set_insert},
   {"set_size", set_size},
+
+  {"queue_new", queue_new},
+  {"queue_size", queue_size},
+  {"queue_push", queue_push},
+  {"queue_pop", queue_pop},
+
   {NULL, NULL}
 };
 
