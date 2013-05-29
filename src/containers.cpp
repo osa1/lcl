@@ -29,16 +29,16 @@ lc_set lc_newset(lua_State *L)
   return new set<int, LuaComparator>(LuaComparator(L));
 }
 
-int lc_set_count(lc_set s, int elem)
+int lc_set_count(lc_set s, int e)
 {
   auto s1 = static_cast<set<int, LuaComparator>*>(s);
-  return s1->count(elem);
+  return s1->count(e);
 }
 
-void lc_set_insert(lc_set s, int elem)
+void lc_set_insert(lc_set s, int e)
 {
   auto s1 = static_cast<set<int, LuaComparator>*>(s);
-  s1->insert(elem);
+  s1->insert(e);
 }
 
 int lc_set_size(lc_set s)

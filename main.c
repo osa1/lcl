@@ -7,7 +7,7 @@
 #include "lualib.h"
 
 
-static int newset(lua_State *L)
+static int set_new(lua_State *L)
 {
   lc_set *a = lua_newuserdata(L, sizeof(lc_set*));
   *a = lc_newset(L);
@@ -73,7 +73,7 @@ static int queue_pop(lua_State *L)
 }
 
 static const struct luaL_Reg containerlib [] = {
-  {"newset", newset},
+  {"set_new", set_new},
   {"set_count", set_count},
   {"set_insert", set_insert},
   {"set_size", set_size},
