@@ -8,11 +8,11 @@
 
 using namespace std;
 
-class Container
+class LuaComparator
 {
   lua_State *L;
 public:
-  Container(lua_State *L) : L(L) {}
+  LuaComparator(lua_State *L) : L(L) {}
   bool operator()(int i1, int i2) const
   {
     lua_rawgeti(L, LUA_REGISTRYINDEX, i1);
@@ -26,24 +26,24 @@ public:
 
 lc_set lc_newset(lua_State *L)
 {
-  return new set<int, Container>(Container(L));
+  return new set<int, LuaComparator>(LuaComparator(L));
 }
 
 int lc_set_count(lc_set s, int elem)
 {
-  auto s1 = static_cast<set<int, Container>*>(s);
+  auto s1 = static_cast<set<int, LuaComparator>*>(s);
   return s1->count(elem);
 }
 
 void lc_set_insert(lc_set s, int elem)
 {
-  auto s1 = static_cast<set<int, Container>*>(s);
+  auto s1 = static_cast<set<int, LuaComparator>*>(s);
   s1->insert(elem);
 }
 
 int lc_set_size(lc_set s)
 {
-  auto s1 = static_cast<set<int, Container>*>(s);
+  auto s1 = static_cast<set<int, LuaComparator>*>(s);
   return s1->size();
 }
 
