@@ -14,7 +14,7 @@ maino:
 
 main: containerso maino
 	# $^
-	$(CC) $(CCFLAGS) containers.o main.o -o main $(LDFLAGS) -lstdc++
+	$(CC) containers.o main.o -o main $(LDFLAGS) -lstdc++
 	#$(CPP) $(CPPFLAGS) $(LDFLAGS) containers.o main.o -o main
 
 clean:
