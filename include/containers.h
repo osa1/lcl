@@ -20,13 +20,15 @@ typedef void* lc_vector;
 typedef void* lc_set;
 
 EXTERNC lc_set lc_newset(lua_State*);
+EXTERNC int lc_set_count(lc_set set, int elem);
+EXTERNC void lc_set_insert(lc_set set, int elem);
+EXTERNC int lc_set_size(lc_set set);
+
 EXTERNC lc_queue lc_newqueue(lua_State*);
 
 EXTERNC lc_stack lc_newstack();
 EXTERNC void lc_stack_push(lc_stack, int);
 
 EXTERNC lc_vector lc_newvector();
-
-
 
 #undef EXTERNC

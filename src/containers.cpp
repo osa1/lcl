@@ -13,11 +13,11 @@ class Container
   lua_State *L;
 public:
   Container(lua_State *L) : L(L) {}
-  bool operator()(int i1, int i2)
+  bool operator()(int i1, int i2) const
   {
     lua_rawgeti(L, LUA_REGISTRYINDEX, i1);
     lua_rawgeti(L, LUA_REGISTRYINDEX, i2);
-    int r = lua_compare(L, 1, 2, LUA_OPLT);
+    int r = lua_compare(L, -1, -2, LUA_OPLT);
     if (r == 1)
       return true;
     return false;
@@ -27,6 +27,24 @@ public:
 lc_set lc_newset(lua_State *L)
 {
   return new set<int, Container>(Container(L));
+}
+
+int lc_set_count(lc_set s, int elem)
+{
+  auto s1 = static_cast<set<int, Container>*>(s);
+  return s1->count(elem);
+}
+
+void lc_set_insert(lc_set s, int elem)
+{
+  auto s1 = static_cast<set<int, Container>*>(s);
+  s1->insert(elem);
+}
+
+int lc_set_size(lc_set s)
+{
+  auto s1 = static_cast<set<int, Container>*>(s);
+  return s1->size();
 }
 
 lc_queue lc_newqueue(lua_State *L)
