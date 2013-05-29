@@ -15,6 +15,7 @@ typedef void* lc_stack;
 typedef void* lc_vector;
 typedef void* lc_set;
 
+EXTERNC lc_set lc_newset(lua_State*);
 EXTERNC lc_queue lc_newqueue(lua_State*);
 
 EXTERNC lc_stack lc_newstack();
