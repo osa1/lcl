@@ -6,10 +6,6 @@
 #include <stack>
 #include <set>
 
-#include "lua.h"
-#include "lauxlib.h"
-#include "lualib.h"
-
 using namespace std;
 
 class Container

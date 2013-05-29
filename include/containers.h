@@ -1,12 +1,16 @@
 #ifdef __cplusplus
 #define EXTERNC extern "C"
-#else
-#define EXTERNC
-#endif
-
+extern "C" {
 #include "lua.h"
 #include "lauxlib.h"
 #include "lualib.h"
+}
+#else
+#define EXTERNC
+#include "lua.h"
+#include "lauxlib.h"
+#include "lualib.h"
+#endif
 
 lua_State *L;
 
