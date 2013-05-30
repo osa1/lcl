@@ -145,11 +145,7 @@ int main()
   luaopen_containerlib(L);
 
   load(L, "test.lua");
-
-  /*lc_queue queue = lc_newqueue(L);*/
-  /*printf("created queue\n");*/
-
-
+  load(L, "test2.lua");
 
   return 0;
 }
