@@ -154,5 +154,7 @@ int main()
   load(L, "test.lua");
   load(L, "test2.lua");
 
+  lua_close(L);
+
   return 0;
 }
