@@ -9,8 +9,16 @@
 
 static int set_new(lua_State *L)
 {
-  lc_set *a = lua_newuserdata(L, sizeof(lc_set*));
-  *a = lc_newset(L);
+  int stack_depth = lua_gettop(L);
+  if (stack_depth == 0) {
+    lc_set *a = lua_newuserdata(L, sizeof(lc_set*));
+    *a = lc_newset(L);
+  } else {
+    luaL_checktype(L, 1, LUA_TFUNCTION);
+    int funref = luaL_ref(L, LUA_REGISTRYINDEX);
+    lc_set *a = lua_newuserdata(L, sizeof(lc_set*));
+    *a = lc_newset_w_comp(L, funref);
+  }
   luaL_setmetatable(L, "containers_set");
   return 1;
 }

@@ -20,6 +20,7 @@ typedef void* lc_vector;
 typedef void* lc_set;
 
 EXTERNC lc_set lc_newset(lua_State*);
+EXTERNC lc_set lc_newset_w_comp(lua_State*, int);
 EXTERNC int lc_set_count(lc_set set, int elem);
 EXTERNC void lc_set_insert(lc_set set, int elem);
 EXTERNC int lc_set_size(lc_set set);

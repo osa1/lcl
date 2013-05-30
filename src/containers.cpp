@@ -12,13 +12,26 @@ using namespace std;
 class LuaComparator
 {
   lua_State *L;
+  int lua_comparator;
 public:
-  LuaComparator(lua_State *L) : L(L) {}
+  LuaComparator(lua_State *L) : L(L), lua_comparator(-1) {}
+  LuaComparator(lua_State *L, int lua_comparator)
+    : L(L), lua_comparator(lua_comparator) {}
   bool operator()(int i1, int i2) const
   {
-    lua_rawgeti(L, LUA_REGISTRYINDEX, i1);
-    lua_rawgeti(L, LUA_REGISTRYINDEX, i2);
-    int r = lua_compare(L, -2, -1, LUA_OPLT);
+    int r;
+    if (lua_comparator != -1) {
+      lua_rawgeti(L, LUA_REGISTRYINDEX, lua_comparator);
+      lua_rawgeti(L, LUA_REGISTRYINDEX, i1);
+      lua_rawgeti(L, LUA_REGISTRYINDEX, i2);
+      lua_call(L, 2, 1);
+      r = lua_toboolean(L, -1);
+      lua_pop(L, 1);
+    } else {
+      lua_rawgeti(L, LUA_REGISTRYINDEX, i1);
+      lua_rawgeti(L, LUA_REGISTRYINDEX, i2);
+      r = lua_compare(L, -2, -1, LUA_OPLT);
+    }
     if (r == 1)
       return true;
     return false;
@@ -28,6 +41,11 @@ public:
 lc_set lc_newset(lua_State *L)
 {
   return new set<int, LuaComparator>(LuaComparator(L));
+}
+
+lc_set lc_newset_w_comp(lua_State *L, int funref)
+{
+  return new set<int, LuaComparator>(LuaComparator(L, funref));
 }
 
 int lc_set_count(lc_set s, int e)

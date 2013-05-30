@@ -42,3 +42,21 @@ while (set:size() ~= 0) do
     print(set:pop():dist())
 end
 
+-- this should behave like max priority queue
+maxheap = Set(function (p1, p2)
+    return p1:dist() > p2:dist()
+end)
+
+maxheap:insert(Point(1, 3))
+maxheap:insert(Point(2, 3))
+maxheap:insert(Point(2, 4))
+maxheap:insert(Point(3, 4))
+maxheap:insert(Point(1, 4))
+maxheap:insert(Point(1, 1))
+maxheap:insert(Point(0, 4))
+
+print(maxheap)
+
+while (maxheap:size() ~= 0) do
+    print(maxheap:pop():dist())
+end
