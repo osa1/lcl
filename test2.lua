@@ -33,6 +33,8 @@ set:insert(Point(1, 4))
 set:insert(Point(1, 1))
 set:insert(Point(0, 4))
 
+print(set)
+
 while (set:size() ~= 0) do
     print(set:pop():dist())
 end

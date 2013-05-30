@@ -67,6 +67,13 @@ static int set_gc(lua_State *L)
   return 0;
 }
 
+static int set_tostring(lua_State *L)
+{
+  lc_set *a = lua_touserdata(L, 1);
+  lua_pushstring(L, lc_set_tostring(*a));
+  return 1;
+}
+
 static int queue_new(lua_State *L)
 {
   lc_queue *a = lua_newuserdata(L, sizeof(lc_queue*));
@@ -116,6 +123,7 @@ static const struct luaL_Reg containerlib_set [] = {
   {"top", set_top},
   {"pop", set_pop},
   {"__gc", set_gc},
+  {"__tostring", set_tostring},
   {NULL, NULL}
 };
 

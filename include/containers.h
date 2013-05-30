@@ -26,6 +26,7 @@ EXTERNC int lc_set_size(lc_set set);
 EXTERNC int lc_set_top(lc_set set);
 EXTERNC int lc_set_pop(lc_set set);
 EXTERNC void lc_set_finalize(lc_set set);
+EXTERNC const char *lc_set_tostring(lc_set set);
 
 EXTERNC lc_queue lc_newqueue(lua_State*);
 EXTERNC int lc_queue_size(lc_queue queue);

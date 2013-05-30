@@ -1,6 +1,7 @@
 #include "containers.h"
 
 #include <iostream>
+#include <sstream>
 #include <vector>
 #include <queue>
 #include <stack>
@@ -66,6 +67,17 @@ void lc_set_finalize(lc_set s)
 {
   auto s1 = static_cast<set<int, LuaComparator>*>(s);
   delete s1;
+}
+
+const char *lc_set_tostring(lc_set s)
+{
+  auto s1 = static_cast<set<int, LuaComparator>*>(s);
+  stringstream ss;
+  ss << "<set:";
+  for (int i : *s1)
+    ss << " " << i;
+  ss << ">";
+  return ss.str().c_str();
 }
 
 lc_queue lc_newqueue(lua_State *L)
