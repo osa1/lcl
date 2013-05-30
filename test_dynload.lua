@@ -26,7 +26,7 @@ end
 setmetatable(Point, { __call = function (_, x, y) return Point.new(x, y) end })
 
 -- this should behave like min priority queue(min heap)
-set = Set.new()
+set = Set()
 
 set:insert(Point(1, 3))
 set:insert(Point(2, 3))

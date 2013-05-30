@@ -15,6 +15,13 @@ static int set_new(lua_State *L)
   return 1;
 }
 
+static int set_call(lua_State *L)
+{
+  lua_insert(L, 1);
+  lua_pop(L, 1);
+  return set_new(L);
+}
+
 static int set_count(lua_State *L)
 {
   luaL_checkudata(L, 1, "containers_set");
@@ -127,6 +134,11 @@ static const struct luaL_Reg containerlib_set [] = {
   {NULL, NULL}
 };
 
+static const struct luaL_Reg containerlib_set_mt [] = {
+  {"__call", set_call},
+  {NULL, NULL}
+};
+
 static const struct luaL_Reg containerlib_queue [] = {
   {"new", queue_new},
   {"size", queue_size},
@@ -138,12 +150,21 @@ static const struct luaL_Reg containerlib_queue [] = {
 
 int luaopen_containerlib(lua_State *L)
 {
+  // load Set
   luaL_newmetatable(L, "containers_set");
   lua_pushvalue(L, -1);
   lua_setfield(L, -2, "__index");
   luaL_setfuncs(L, containerlib_set, 0);
+
+  // setmetatable(containers_set, { __call = ... })
+  lua_newtable(L);
+  luaL_setfuncs(L, containerlib_set_mt, 0);
+  lua_setmetatable(L, 1);
+
   lua_setglobal(L, "Set");
 
+  // load Queue
+  // TODO: setmetatable(containers_queue, { __call = ... })
   luaL_newmetatable(L, "containers_queue");
   lua_pushvalue(L, -1);
   lua_setfield(L, -2, "__index");
