@@ -17,7 +17,7 @@ public:
   {
     lua_rawgeti(L, LUA_REGISTRYINDEX, i1);
     lua_rawgeti(L, LUA_REGISTRYINDEX, i2);
-    int r = lua_compare(L, -1, -2, LUA_OPLT);
+    int r = lua_compare(L, -2, -1, LUA_OPLT);
     if (r == 1)
       return true;
     return false;
