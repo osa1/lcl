@@ -8,6 +8,9 @@ CCFLAGS = -g -Wall -Iinclude -I$(LUA_INSTALL)/include/
 
 LDFLAGS = -L$(LUA_INSTALL)/lib/ -llua -lm -ldl
 
+OBJS = main.o containers.o
+SOBJS = main.so containers.so
+
 main: containers.o main.o
 	$(CC) $^ -o main $(LDFLAGS) -lstdc++
 
@@ -17,6 +20,13 @@ containers.o: src/containers.cpp
 main.o: main.c
 	$(CC) $(CCFLAGS) -c $<
 
+containers.so: src/containers.cpp
+	$(CPP) $(CPPFLAGS) -shared -rdynamic -fPIC  $< -o containers.so
+
+main.so: containers.so main.c
+	$(CC) $(CCFLAGS) -shared -rdynamic -fPIC main.c -o main.so
+
 clean:
-	-rm *.o
+	-rm $(OBJS)
+	-rm $(SOBJS)
 	-rm main
