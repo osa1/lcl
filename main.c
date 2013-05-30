@@ -60,6 +60,13 @@ static int set_pop(lua_State *L)
   return 1;
 }
 
+static int set_gc(lua_State *L)
+{
+  lc_set *a = lua_touserdata(L, 1);
+  lc_set_finalize(*a);
+  return 0;
+}
+
 static int queue_new(lua_State *L)
 {
   lc_queue *a = lua_newuserdata(L, sizeof(lc_queue*));
@@ -94,6 +101,13 @@ static int queue_pop(lua_State *L)
   return 1;
 }
 
+static int queue_gc(lua_State *L)
+{
+  lc_queue *a = lua_touserdata(L, 1);
+  lc_queue_finalize(*a);
+  return 0;
+}
+
 static const struct luaL_Reg containerlib_set [] = {
   {"new", set_new},
   {"count", set_count},
@@ -101,6 +115,7 @@ static const struct luaL_Reg containerlib_set [] = {
   {"size", set_size},
   {"top", set_top},
   {"pop", set_pop},
+  {"__gc", set_gc},
   {NULL, NULL}
 };
 
@@ -109,6 +124,7 @@ static const struct luaL_Reg containerlib_queue [] = {
   {"size", queue_size},
   {"push", queue_push},
   {"pop", queue_pop},
+  {"__gc", queue_gc},
   {NULL, NULL}
 };
 

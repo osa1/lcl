@@ -62,6 +62,12 @@ int lc_set_pop(lc_set s)
   return ret;
 }
 
+void lc_set_finalize(lc_set s)
+{
+  auto s1 = static_cast<set<int, LuaComparator>*>(s);
+  delete s1;
+}
+
 lc_queue lc_newqueue(lua_State *L)
 {
   return new queue<int>();
@@ -85,6 +91,12 @@ int lc_queue_pop(lc_queue q)
   int ret = q1->front();
   q1->pop();
   return ret;
+}
+
+void lc_queue_finalize(lc_queue q)
+{
+  auto q1 = static_cast<queue<int>*>(q);
+  delete q1;
 }
 
 lc_stack lc_newstack(lua_State *L)

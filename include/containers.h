@@ -25,11 +25,13 @@ EXTERNC void lc_set_insert(lc_set set, int elem);
 EXTERNC int lc_set_size(lc_set set);
 EXTERNC int lc_set_top(lc_set set);
 EXTERNC int lc_set_pop(lc_set set);
+EXTERNC void lc_set_finalize(lc_set set);
 
 EXTERNC lc_queue lc_newqueue(lua_State*);
 EXTERNC int lc_queue_size(lc_queue queue);
 EXTERNC void lc_queue_push(lc_queue queue, int elem);
 EXTERNC int lc_queue_pop(lc_queue queue);
+EXTERNC void lc_queue_finalize(lc_queue set);
 
 EXTERNC lc_stack lc_newstack();
 EXTERNC void lc_stack_push(lc_stack, int);
