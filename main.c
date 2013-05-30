@@ -50,9 +50,8 @@ static int queue_new(lua_State *L)
 
 static int queue_size(lua_State *L)
 {
-  lc_queue *a = lua_touserdata(L, 1);
-  int ret = lc_queue_size(a);
-  lua_pushinteger(L, ret);
+  lc_set *a = lua_touserdata(L, 1);
+  lua_pushinteger(L, lc_queue_size(*a));
   return 1;
 }
 
