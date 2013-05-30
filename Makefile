@@ -1,21 +1,21 @@
+LUA_INSTALL = /home/omer/opt/lua-5.2.2/install
+
 CPP = clang++
-CPPFLAGS = -g -std=c++11 -Wall -Iinclude -I/home/omer/opt/lua-5.2.2/install/include/
+CPPFLAGS = -g -std=c++11 -Wall -Iinclude -I$(LUA_INSTALL)/include/
 
 CC  = clang
-CCFLAGS = -g -Wall -Iinclude -I/home/omer/opt/lua-5.2.2/install/include/
+CCFLAGS = -g -Wall -Iinclude -I$(LUA_INSTALL)/include/
 
-LDFLAGS = -L/home/omer/opt/lua-5.2.2/install/lib/ -llua -lm
+LDFLAGS = -L$(LUA_INSTALL)/lib/ -llua -lm -ldl
 
-containerso:
-	$(CPP) $(CPPFLAGS) -c src/containers.cpp
+main: containers.o main.o
+	$(CC) $^ -o main $(LDFLAGS) -lstdc++
 
-maino:
-	$(CC) $(CCFLAGS) -c main.c
+containers.o: src/containers.cpp
+	$(CPP) $(CPPFLAGS) -c $<
 
-main: containerso maino
-	# $^
-	$(CC) containers.o main.o -o main $(LDFLAGS) -lstdc++
-	#$(CPP) $(CPPFLAGS) $(LDFLAGS) containers.o main.o -o main
+main.o: main.c
+	$(CC) $(CCFLAGS) -c $<
 
 clean:
 	-rm *.o
