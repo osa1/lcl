@@ -47,6 +47,21 @@ int lc_set_size(lc_set s)
   return s1->size();
 }
 
+int lc_set_top(lc_set s)
+{
+  auto s1 = static_cast<set<int, LuaComparator>*>(s);
+  return *s1->begin();
+}
+
+int lc_set_pop(lc_set s)
+{
+  auto s1 = static_cast<set<int, LuaComparator>*>(s);
+  // TODO: set should not be empty
+  int ret = *s1->begin();
+  s1->erase(s1->begin());
+  return ret;
+}
+
 lc_queue lc_newqueue(lua_State *L)
 {
   return new queue<int>();
