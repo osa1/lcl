@@ -11,15 +11,14 @@ static int set_new(lua_State *L)
 {
   lc_set *a = lua_newuserdata(L, sizeof(lc_set*));
   *a = lc_newset(L);
-  /*luaL_getmetatable(L, "Containers.set");*/
-  /*lua_setmetatable(L, 1);*/
+  luaL_setmetatable(L, "containers_set_mt");
   return 1;
 }
 
 static int set_count(lua_State *L)
 {
+  luaL_checkudata(L, 1, "containers_set_mt");
   int ref = luaL_ref(L, LUA_REGISTRYINDEX);
-  /*lc_set *a = luaL_checkudata(L, 1, "Containers.set");*/
   lc_set *a = lua_touserdata(L, 1);
   int ret = lc_set_count(*a, ref);
   lua_pushinteger(L, ret);
@@ -28,6 +27,7 @@ static int set_count(lua_State *L)
 
 static int set_insert(lua_State *L)
 {
+  luaL_checkudata(L, 1, "containers_set_mt");
   int ref = luaL_ref(L, LUA_REGISTRYINDEX);
   lc_set *a = lua_touserdata(L, 1);
   lc_set_insert(*a, ref);
@@ -36,6 +36,7 @@ static int set_insert(lua_State *L)
 
 static int set_size(lua_State *L)
 {
+  luaL_checkudata(L, 1, "containers_set_mt");
   lc_set *a = lua_touserdata(L, 1);
   lua_pushinteger(L, lc_set_size(*a));
   return 1;
@@ -45,11 +46,13 @@ static int queue_new(lua_State *L)
 {
   lc_queue *a = lua_newuserdata(L, sizeof(lc_queue*));
   *a = lc_newqueue(L);
+  luaL_setmetatable(L, "containers_queue_mt");
   return 1;
 }
 
 static int queue_size(lua_State *L)
 {
+  luaL_checkudata(L, 1, "containers_queue_mt");
   lc_set *a = lua_touserdata(L, 1);
   lua_pushinteger(L, lc_queue_size(*a));
   return 1;
@@ -57,6 +60,7 @@ static int queue_size(lua_State *L)
 
 static int queue_push(lua_State *L)
 {
+  luaL_checkudata(L, 1, "containers_queue_mt");
   int ref = luaL_ref(L, LUA_REGISTRYINDEX);
   lc_queue *a = lua_touserdata(L, 1);
   lc_queue_push(*a, ref);
@@ -65,6 +69,7 @@ static int queue_push(lua_State *L)
 
 static int queue_pop(lua_State *L)
 {
+  luaL_checkudata(L, 1, "containers_queue_mt");
   lc_queue *a = lua_touserdata(L, 1);
   int ret = lc_queue_pop(*a);
   lua_rawgeti(L, LUA_REGISTRYINDEX, ret);
@@ -87,9 +92,13 @@ static const struct luaL_Reg containerlib [] = {
 
 int luaopen_containerlib(lua_State *L)
 {
+  luaL_newmetatable(L, "containers_set_mt");
+  luaL_newmetatable(L, "containers_queue_mt");
+
   lua_newtable(L);
   luaL_setfuncs(L, containerlib, 0);
   lua_setglobal(L, "containers");
+
   return 1;
 }
 
