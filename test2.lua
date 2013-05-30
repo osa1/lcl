@@ -23,15 +23,16 @@ end
 setmetatable(Point, { __call = function (_, x, y) return Point.new(x, y) end })
 
 -- this should behave like min priority queue(min heap)
-set = containers.set_new()
-containers.set_insert(set, Point(1, 3))
-containers.set_insert(set, Point(2, 3))
-containers.set_insert(set, Point(2, 4))
-containers.set_insert(set, Point(3, 4))
-containers.set_insert(set, Point(1, 4))
-containers.set_insert(set, Point(1, 1))
-containers.set_insert(set, Point(0, 4))
+set = Set.new()
 
-while (containers.set_size(set) ~= 0) do
-    print(containers.set_pop(set):dist())
+set:insert(Point(1, 3))
+set:insert(Point(2, 3))
+set:insert(Point(2, 4))
+set:insert(Point(3, 4))
+set:insert(Point(1, 4))
+set:insert(Point(1, 1))
+set:insert(Point(0, 4))
+
+while (set:size() ~= 0) do
+    print(set:pop():dist())
 end
