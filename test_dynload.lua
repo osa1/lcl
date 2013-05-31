@@ -23,7 +23,17 @@ function Point:dist()
     return self.x*self.x + self.y*self.y
 end
 
+function Point:__tostring()
+    return table.concat({ "Point<", self.x, ", ", self.y, ">" })
+end
+
 setmetatable(Point, { __call = function (_, x, y) return Point.new(x, y) end })
+
+set = Set()
+set:insert(9)
+set:insert(8)
+set:insert(7)
+print(set)
 
 -- this should behave like min priority queue(min heap)
 set = Set()
@@ -36,7 +46,7 @@ set:insert(Point(1, 4))
 set:insert(Point(1, 1))
 set:insert(Point(0, 4))
 
-print(set)
+print("set:", set)
 
 while (set:size() ~= 0) do
     print(set:pop():dist())
@@ -55,7 +65,7 @@ maxheap:insert(Point(1, 4))
 maxheap:insert(Point(1, 1))
 maxheap:insert(Point(0, 4))
 
-print(maxheap)
+print("maxheap:", maxheap)
 
 while (maxheap:size() ~= 0) do
     print(maxheap:pop():dist())

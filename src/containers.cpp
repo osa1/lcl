@@ -81,21 +81,20 @@ int lc_set_pop(lc_set s)
   return ret;
 }
 
+unsigned lc_set_torefarray(lc_set s, int **arr)
+{
+  auto s1 = static_cast<set<int, LuaComparator>*>(s);
+  *arr = new int[s1->size()];
+  int arridx = 0;
+  for (int r : *s1)
+    (*arr)[arridx++] = r;
+  return s1->size();
+}
+
 void lc_set_finalize(lc_set s)
 {
   auto s1 = static_cast<set<int, LuaComparator>*>(s);
   delete s1;
-}
-
-const char *lc_set_tostring(lc_set s)
-{
-  auto s1 = static_cast<set<int, LuaComparator>*>(s);
-  stringstream ss;
-  ss << "<set:";
-  for (int i : *s1)
-    ss << " " << i;
-  ss << ">";
-  return ss.str().c_str();
 }
 
 lc_queue lc_newqueue(lua_State *L)

@@ -120,7 +120,39 @@ static int set_gc(lua_State *L)
 static int set_tostring(lua_State *L)
 {
   lc_set *a = lua_touserdata(L, 1);
-  lua_pushstring(L, lc_set_tostring(*a));
+
+  // get reference array
+  int *refs;
+  int len = lc_set_torefarray(*a, &refs);
+
+  // push table.concat function
+  lua_getglobal(L, "table");
+  lua_getfield(L, -1, "concat");
+
+  // pop `table` table
+  lua_remove(L, -2);
+
+  // create a list with length of `len + 2`
+  lua_createtable(L, len+2, 0);
+
+  // set first element
+  lua_pushstring(L, "< set:");
+  lua_rawseti(L, -2, 1);
+
+  for (unsigned i = 0; i < len; i++)
+  {
+    lua_getglobal(L, "tostring");
+    lua_rawgeti(L, LUA_REGISTRYINDEX, refs[i]);
+    lua_call(L, 1, 1);
+    lua_rawseti(L, -2, i+2);
+  }
+
+  lua_pushstring(L, ">");
+  lua_rawseti(L, -2, len+2);
+
+  lua_pushstring(L, " ");
+
+  lua_call(L, 2, 1);
   return 1;
 }
 
