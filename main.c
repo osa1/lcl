@@ -153,6 +153,7 @@ static int set_tostring(lua_State *L)
   lua_pushstring(L, " ");
 
   lua_call(L, 2, 1);
+  free(refs);
   return 1;
 }
 
