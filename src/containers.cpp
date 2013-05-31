@@ -60,7 +60,7 @@ void lc_set_insert(lc_set s, int e)
   s1->insert(e);
 }
 
-int lc_set_size(lc_set s)
+unsigned lc_set_size(lc_set s)
 {
   auto s1 = static_cast<set<int, LuaComparator>*>(s);
   return s1->size();
@@ -102,7 +102,7 @@ lc_queue lc_newqueue(lua_State *L)
   return new queue<int>();
 }
 
-int lc_queue_size(lc_queue q)
+unsigned lc_queue_size(lc_queue q)
 {
   auto q1 = static_cast<queue<int>*>(q);
   return q1->size();
