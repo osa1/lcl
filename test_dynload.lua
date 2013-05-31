@@ -48,7 +48,7 @@ set:insert(Point(0, 4))
 
 print("set:", set)
 
-while (set:size() ~= 0) do
+while set:size() ~= 0 do
     print(set:pop():dist())
 end
 
@@ -67,6 +67,30 @@ maxheap:insert(Point(0, 4))
 
 print("maxheap:", maxheap)
 
-while (maxheap:size() ~= 0) do
+while maxheap:size() ~= 0 do
     print(maxheap:pop():dist())
+end
+
+
+print("\n---- deque ----")
+
+
+deque = Deque()
+
+print("deque size:", deque:size())
+
+deque:push_front(1)
+deque:push_back(2)
+
+print("front:", deque:front())
+print("back:", deque:back())
+
+deque:insert(1, 20)
+deque:insert(2, 30)
+
+print("deque:", deque)
+
+print("deque size:", deque:size())
+while deque:size() ~= 0 do
+    print("pop back:", deque:pop_back())
 end

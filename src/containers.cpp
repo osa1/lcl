@@ -1,10 +1,6 @@
 #include "containers.h"
 
-#include <iostream>
-#include <sstream>
-#include <vector>
-#include <queue>
-#include <stack>
+#include <deque>
 #include <set>
 
 using namespace std;
@@ -97,49 +93,80 @@ void lc_set_finalize(lc_set s)
   delete s1;
 }
 
-lc_queue lc_newqueue(lua_State *L)
+lc_deque lc_newdeque(lua_State *L)
 {
-  return new queue<int>();
+  return new deque<int>();
 }
 
-unsigned lc_queue_size(lc_queue q)
+unsigned lc_deque_size(lc_deque d)
 {
-  auto q1 = static_cast<queue<int>*>(q);
-  return q1->size();
+  auto d1 = static_cast<deque<int>*>(d);
+  return d1->size();
 }
 
-void lc_queue_push(lc_queue q, int e)
+int lc_deque_front(lc_deque d)
 {
-  auto q1 = static_cast<queue<int>*>(q);
-  q1->push(e);
+  auto d1 = static_cast<deque<int>*>(d);
+  return d1->front();
 }
 
-int lc_queue_pop(lc_queue q)
+int lc_deque_back(lc_deque d)
 {
-  auto q1 = static_cast<queue<int>*>(q);
-  int ret = q1->front();
-  q1->pop();
+  auto d1 = static_cast<deque<int>*>(d);
+  return d1->back();
+}
+
+void lc_deque_insert(lc_deque d, int idx, int elem)
+{
+  auto d1 = static_cast<deque<int>*>(d);
+  int i = 0;
+  for (auto iter = d1->begin(); iter != d1->end(); iter++)
+    if (i++ == idx) {
+      d1->insert(iter, elem);
+      break;
+    }
+}
+
+void lc_deque_push_front(lc_deque d, int elem)
+{
+  auto d1 = static_cast<deque<int>*>(d);
+  d1->push_front(elem);
+}
+
+void lc_deque_push_back(lc_deque d, int elem)
+{
+  auto d1 = static_cast<deque<int>*>(d);
+  d1->push_back(elem);
+}
+
+int lc_deque_pop_front(lc_deque d)
+{
+  auto d1 = static_cast<deque<int>*>(d);
+  int ret = d1->front();
+  d1->pop_front();
   return ret;
 }
 
-void lc_queue_finalize(lc_queue q)
+int lc_deque_pop_back(lc_deque d)
 {
-  auto q1 = static_cast<queue<int>*>(q);
-  delete q1;
+  auto d1 = static_cast<deque<int>*>(d);
+  int ret = d1->back();
+  d1->pop_back();
+  return ret;
 }
 
-lc_stack lc_newstack(lua_State *L)
+void lc_deque_finalize(lc_deque d)
 {
-  return new stack<int>();
+  auto d1 = static_cast<deque<int>*>(d);
+  delete d1;
 }
 
-void lc_stack_push(lc_stack s, int i)
+unsigned lc_deque_torefarray(lc_deque d, int **arr)
 {
-  auto s1 = static_cast<stack<int>*>(s);
-  s1->push(i);
-}
-
-lc_vector lc_newvector(lua_State *L)
-{
-  return new vector<int>();
+  auto d1 = static_cast<deque<int>*>(d);
+  *arr = new int[d1->size()];
+  int arridx = 0;
+  for (int r : *d1)
+    (*arr)[arridx++] = r;
+  return d1->size();
 }

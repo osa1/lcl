@@ -96,8 +96,7 @@ static int set_top(lua_State *L)
 {
   luaL_checkudata(L, 1, "containers_set");
   lc_set *a = lua_touserdata(L, 1);
-  int ret = lc_set_top(*a);
-  lua_rawgeti(L, LUA_REGISTRYINDEX, ret);
+  lua_rawgeti(L, LUA_REGISTRYINDEX, lc_set_top(*a));
   return 1;
 }
 
@@ -105,14 +104,20 @@ static int set_pop(lua_State *L)
 {
   luaL_checkudata(L, 1, "containers_set");
   lc_set *a = lua_touserdata(L, 1);
-  int ret = lc_set_pop(*a);
-  lua_rawgeti(L, LUA_REGISTRYINDEX, ret);
+  lua_rawgeti(L, LUA_REGISTRYINDEX, lc_set_pop(*a));
   return 1;
 }
 
 static int set_gc(lua_State *L)
 {
   lc_set *a = lua_touserdata(L, 1);
+
+  int *refs;
+  int len = lc_set_torefarray(*a, &refs);
+
+  for (int i = 0; i < len; i++)
+    luaL_unref(L, LUA_REGISTRYINDEX, refs[i]);
+
   lc_set_finalize(*a);
   return 0;
 }
@@ -157,45 +162,141 @@ static int set_tostring(lua_State *L)
   return 1;
 }
 
-static int queue_new(lua_State *L)
+static int deque_new(lua_State *L)
 {
-  lc_queue *a = lua_newuserdata(L, sizeof(lc_queue*));
-  *a = lc_newqueue(L);
-  luaL_setmetatable(L, "containers_queue");
+  lc_deque *a = lua_newuserdata(L, sizeof(lc_deque*));
+  *a = lc_newdeque(L);
+  luaL_setmetatable(L, "containers_deque");
   return 1;
 }
 
-static int queue_size(lua_State *L)
+static int deque_call(lua_State *L)
 {
-  luaL_checkudata(L, 1, "containers_queue");
-  lc_set *a = lua_touserdata(L, 1);
-  lua_pushinteger(L, lc_queue_size(*a));
+  lua_insert(L, 1);
+  lua_pop(L, 1);
+  return deque_new(L);
+}
+
+static int deque_size(lua_State *L)
+{
+  luaL_checkudata(L, 1, "containers_deque");
+  lc_deque *a = lua_touserdata(L, 1);
+  lua_pushinteger(L, lc_deque_size(*a));
   return 1;
 }
 
-static int queue_push(lua_State *L)
+static int deque_front(lua_State *L)
 {
-  luaL_checkudata(L, 1, "containers_queue");
+  luaL_checkudata(L, 1, "containers_deque");
+  lc_deque *a = lua_touserdata(L, 1);
+  lua_rawgeti(L, LUA_REGISTRYINDEX, lc_deque_front(*a));
+  return 1;
+}
+
+static int deque_back(lua_State *L)
+{
+  luaL_checkudata(L, 1, "containers_deque");
+  lc_deque *a = lua_touserdata(L, 1);
+  lua_rawgeti(L, LUA_REGISTRYINDEX, lc_deque_back(*a));
+  return 1;
+}
+
+static int deque_insert(lua_State *L)
+{
+  luaL_checkudata(L, 1, "containers_deque");
+  lc_deque *a = lua_touserdata(L, 1);
+  int idx = luaL_checkint(L, 2);
   int ref = luaL_ref(L, LUA_REGISTRYINDEX);
-  lc_queue *a = lua_touserdata(L, 1);
-  lc_queue_push(*a, ref);
+  lc_deque_insert(*a, idx-1, ref);
   return 0;
 }
 
-static int queue_pop(lua_State *L)
+static int deque_push_front(lua_State *L)
 {
-  luaL_checkudata(L, 1, "containers_queue");
-  lc_queue *a = lua_touserdata(L, 1);
-  int ret = lc_queue_pop(*a);
-  lua_rawgeti(L, LUA_REGISTRYINDEX, ret);
+  luaL_checkudata(L, 1, "containers_deque");
+  int ref = luaL_ref(L, LUA_REGISTRYINDEX);
+  lc_deque *a = lua_touserdata(L, 1);
+  lc_deque_push_front(*a, ref);
+  return 0;
+}
+
+static int deque_push_back(lua_State *L)
+{
+  luaL_checkudata(L, 1, "containers_deque");
+  int ref = luaL_ref(L, LUA_REGISTRYINDEX);
+  lc_deque *a = lua_touserdata(L, 1);
+  lc_deque_push_back(*a, ref);
+  return 0;
+}
+
+static int deque_pop_front(lua_State *L)
+{
+  luaL_checkudata(L, 1, "containers_deque");
+  lc_deque *a = lua_touserdata(L, 1);
+  lua_rawgeti(L, LUA_REGISTRYINDEX, lc_deque_pop_front(*a));
   return 1;
 }
 
-static int queue_gc(lua_State *L)
+static int deque_pop_back(lua_State *L)
 {
-  lc_queue *a = lua_touserdata(L, 1);
-  lc_queue_finalize(*a);
+  luaL_checkudata(L, 1, "containers_deque");
+  lc_deque *a = lua_touserdata(L, 1);
+  lua_rawgeti(L, LUA_REGISTRYINDEX, lc_deque_pop_back(*a));
+  return 1;
+}
+
+static int deque_gc(lua_State *L)
+{
+  lc_deque *a = lua_touserdata(L, 1);
+
+  int *refs;
+  int len = lc_deque_torefarray(*a, &refs);
+
+  for (int i = 0; i < len; i++)
+    luaL_unref(L, LUA_REGISTRYINDEX, refs[i]);
+
+  lc_deque_finalize(*a);
   return 0;
+}
+
+static int deque_tostring(lua_State *L)
+{
+  lc_set *a = lua_touserdata(L, 1);
+
+  // get reference array
+  int *refs;
+  int len = lc_deque_torefarray(*a, &refs);
+
+  // push table.concat function
+  lua_getglobal(L, "table");
+  lua_getfield(L, -1, "concat");
+
+  // pop `table` table
+  lua_remove(L, -2);
+
+  // create a list with length of `len + 2`
+  lua_createtable(L, len+2, 0);
+
+  // set first element
+  lua_pushstring(L, "< deque:");
+  lua_rawseti(L, -2, 1);
+
+  for (unsigned i = 0; i < len; i++)
+  {
+    lua_getglobal(L, "tostring");
+    lua_rawgeti(L, LUA_REGISTRYINDEX, refs[i]);
+    lua_call(L, 1, 1);
+    lua_rawseti(L, -2, i+2);
+  }
+
+  lua_pushstring(L, ">");
+  lua_rawseti(L, -2, len+2);
+
+  lua_pushstring(L, " ");
+
+  lua_call(L, 2, 1);
+  free(refs);
+  return 1;
 }
 
 static const struct luaL_Reg containerlib_set [] = {
@@ -215,12 +316,23 @@ static const struct luaL_Reg containerlib_set_mt [] = {
   {NULL, NULL}
 };
 
-static const struct luaL_Reg containerlib_queue [] = {
-  {"new", queue_new},
-  {"size", queue_size},
-  {"push", queue_push},
-  {"pop", queue_pop},
-  {"__gc", queue_gc},
+static const struct luaL_Reg containerlib_deque [] = {
+  {"new", deque_new},
+  {"size", deque_size},
+  {"front", deque_front},
+  {"back", deque_back},
+  {"insert", deque_insert},
+  {"push_front", deque_push_front},
+  {"push_back", deque_push_back},
+  {"pop_front", deque_pop_front},
+  {"pop_back", deque_pop_back},
+  {"__gc", deque_gc},
+  {"__tostring", deque_tostring},
+  {NULL, NULL}
+};
+
+static const struct luaL_Reg containerlib_deque_mt [] = {
+  {"__call", deque_call},
   {NULL, NULL}
 };
 
@@ -239,13 +351,16 @@ int luaopen_containerlib(lua_State *L)
 
   lua_setglobal(L, "Set");
 
-  // load Queue
-  // TODO: setmetatable(containers_queue, { __call = ... })
-  luaL_newmetatable(L, "containers_queue");
+
+  // load Deque
+  luaL_newmetatable(L, "containers_deque");
   lua_pushvalue(L, -1);
   lua_setfield(L, -2, "__index");
-  luaL_setfuncs(L, containerlib_queue, 0);
-  lua_setglobal(L, "Queue");
+  luaL_setfuncs(L, containerlib_deque, 0);
+  lua_newtable(L);
+  luaL_setfuncs(L, containerlib_deque_mt, 0);
+  lua_setmetatable(L, 1);
+  lua_setglobal(L, "Deque");
 
   return 1;
 }
