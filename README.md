@@ -26,7 +26,7 @@ After setting the variables, `make` should generate required `.so` files. Then y
 
 ## TODO
 
-* Write a configure to set CC, CPP and LUA_INSTALL variables in Makefile.
+* Write a configure script to set CC, CPP and LUA_INSTALL variables in Makefile.
 * Find a way to generate only one `.so` file.
 * Check what happens when read/pop from an empty container. Return a consistent value in that situations.
 * Add more containers?
