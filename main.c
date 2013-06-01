@@ -354,11 +354,7 @@ int main()
   lua_State *L = luaL_newstate();
   luaL_openlibs(L);
   luaopen_containerlib(L);
-
   load(L, "test.lua");
-  load(L, "test2.lua");
-
   lua_close(L);
-
   return 0;
 }
