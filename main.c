@@ -151,6 +151,7 @@ static int set_gc(lua_State *L)
     luaL_unref(L, LUA_REGISTRYINDEX, refs[i]);
 
   lc_set_finalize(*a);
+  free(refs);
   return 0;
 }
 
@@ -258,6 +259,7 @@ static int deque_gc(lua_State *L)
     luaL_unref(L, LUA_REGISTRYINDEX, refs[i]);
 
   lc_deque_finalize(*a);
+  free(refs);
   return 0;
 }
 
