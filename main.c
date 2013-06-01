@@ -41,6 +41,38 @@ static void stackdump(lua_State *L)
   printf("\n");
 }
 
+static void refarray_to_string(lua_State *L, const char *cname, int *refs, int len)
+{
+  // push table.concat function
+  lua_getglobal(L, "table");
+  lua_getfield(L, -1, "concat");
+
+  // pop `table` table
+  lua_remove(L, -2);
+
+  // create a list with length of `len + 2`
+  lua_createtable(L, len+2, 0);
+
+  // set first element
+  lua_pushstring(L, cname);
+  lua_rawseti(L, -2, 1);
+
+  for (unsigned i = 0; i < len; i++)
+  {
+    lua_getglobal(L, "tostring");
+    lua_rawgeti(L, LUA_REGISTRYINDEX, refs[i]);
+    lua_call(L, 1, 1);
+    lua_rawseti(L, -2, i+2);
+  }
+
+  lua_pushstring(L, ">");
+  lua_rawseti(L, -2, len+2);
+
+  lua_pushstring(L, " ");
+
+  lua_call(L, 2, 1);
+}
+
 
 static int set_new(lua_State *L)
 {
@@ -125,39 +157,9 @@ static int set_gc(lua_State *L)
 static int set_tostring(lua_State *L)
 {
   lc_set *a = lua_touserdata(L, 1);
-
-  // get reference array
   int *refs;
   int len = lc_set_torefarray(*a, &refs);
-
-  // push table.concat function
-  lua_getglobal(L, "table");
-  lua_getfield(L, -1, "concat");
-
-  // pop `table` table
-  lua_remove(L, -2);
-
-  // create a list with length of `len + 2`
-  lua_createtable(L, len+2, 0);
-
-  // set first element
-  lua_pushstring(L, "< set:");
-  lua_rawseti(L, -2, 1);
-
-  for (unsigned i = 0; i < len; i++)
-  {
-    lua_getglobal(L, "tostring");
-    lua_rawgeti(L, LUA_REGISTRYINDEX, refs[i]);
-    lua_call(L, 1, 1);
-    lua_rawseti(L, -2, i+2);
-  }
-
-  lua_pushstring(L, ">");
-  lua_rawseti(L, -2, len+2);
-
-  lua_pushstring(L, " ");
-
-  lua_call(L, 2, 1);
+  refarray_to_string(L, "< set", refs, len);
   free(refs);
   return 1;
 }
@@ -262,39 +264,9 @@ static int deque_gc(lua_State *L)
 static int deque_tostring(lua_State *L)
 {
   lc_set *a = lua_touserdata(L, 1);
-
-  // get reference array
   int *refs;
   int len = lc_deque_torefarray(*a, &refs);
-
-  // push table.concat function
-  lua_getglobal(L, "table");
-  lua_getfield(L, -1, "concat");
-
-  // pop `table` table
-  lua_remove(L, -2);
-
-  // create a list with length of `len + 2`
-  lua_createtable(L, len+2, 0);
-
-  // set first element
-  lua_pushstring(L, "< deque:");
-  lua_rawseti(L, -2, 1);
-
-  for (unsigned i = 0; i < len; i++)
-  {
-    lua_getglobal(L, "tostring");
-    lua_rawgeti(L, LUA_REGISTRYINDEX, refs[i]);
-    lua_call(L, 1, 1);
-    lua_rawseti(L, -2, i+2);
-  }
-
-  lua_pushstring(L, ">");
-  lua_rawseti(L, -2, len+2);
-
-  lua_pushstring(L, " ");
-
-  lua_call(L, 2, 1);
+  refarray_to_string(L, "< deque", refs, len);
   free(refs);
   return 1;
 }
@@ -336,32 +308,26 @@ static const struct luaL_Reg containerlib_deque_mt [] = {
   {NULL, NULL}
 };
 
+static void loadlib(lua_State *L, const char *global_name,
+    const char *mt_name, const luaL_Reg *funs, const luaL_Reg *mt_funs)
+{
+  luaL_newmetatable(L, mt_name);
+  lua_pushvalue(L, -1);
+  lua_setfield(L, -2, "__index");
+  luaL_setfuncs(L, funs, 0);
+
+  // setmetatable(mt_name, { __call = ... })
+  lua_newtable(L);
+  luaL_setfuncs(L, mt_funs, 0);
+  lua_setmetatable(L, 1);
+
+  lua_setglobal(L, global_name);
+}
+
 int luaopen_containerlib(lua_State *L)
 {
-  // load Set
-  luaL_newmetatable(L, "containers_set");
-  lua_pushvalue(L, -1);
-  lua_setfield(L, -2, "__index");
-  luaL_setfuncs(L, containerlib_set, 0);
-
-  // setmetatable(containers_set, { __call = ... })
-  lua_newtable(L);
-  luaL_setfuncs(L, containerlib_set_mt, 0);
-  lua_setmetatable(L, 1);
-
-  lua_setglobal(L, "Set");
-
-
-  // load Deque
-  luaL_newmetatable(L, "containers_deque");
-  lua_pushvalue(L, -1);
-  lua_setfield(L, -2, "__index");
-  luaL_setfuncs(L, containerlib_deque, 0);
-  lua_newtable(L);
-  luaL_setfuncs(L, containerlib_deque_mt, 0);
-  lua_setmetatable(L, 1);
-  lua_setglobal(L, "Deque");
-
+  loadlib(L, "Set", "containers_set", containerlib_set, containerlib_set_mt);
+  loadlib(L, "Deque", "containers_deque", containerlib_deque, containerlib_deque_mt);
   return 1;
 }
 
