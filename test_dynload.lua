@@ -1,7 +1,7 @@
 print("\n---- dynamic load test ----")
 
 print(package.loadlib("/home/omer/cpp/lua-containers/containers.so", "*"))
-package.loadlib("/home/omer/cpp/lua-containers/main.so", "luaopen_containerlib")()
+package.loadlib("/home/omer/cpp/lua-containers/liblcl.so", "luaopen_containerlib")()
 
 Point = {}
 Point.__index = Point
@@ -35,7 +35,7 @@ set:insert(8)
 set:insert(7)
 print(set)
 
--- this should behave like min priority queue(min heap)
+-- this should behave like min heap
 set = Set()
 
 set:insert(Point(1, 3))
@@ -52,7 +52,7 @@ while set:size() ~= 0 do
     print(set:pop():dist())
 end
 
--- this should behave like max priority queue
+-- this should behave like max heap
 maxheap = Set(function (p1, p2)
     return p1:dist() > p2:dist()
 end)
