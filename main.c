@@ -41,7 +41,7 @@ static void stackdump(lua_State *L)
   printf("\n");
 }
 
-static void refarray_to_string(lua_State *L, const char *cname, int *refs, int len)
+static void refarray_to_string(lua_State *L, const char *cname, int *refs, unsigned len)
 {
   // push table.concat function
   lua_getglobal(L, "table");
@@ -159,7 +159,7 @@ static int set_tostring(lua_State *L)
 {
   lc_set *a = lua_touserdata(L, 1);
   int *refs;
-  int len = lc_set_torefarray(*a, &refs);
+  unsigned len = lc_set_torefarray(*a, &refs);
   refarray_to_string(L, "< set", refs, len);
   free(refs);
   return 1;
@@ -168,7 +168,7 @@ static int set_tostring(lua_State *L)
 static int deque_new(lua_State *L)
 {
   lc_deque *a = lua_newuserdata(L, sizeof(lc_deque*));
-  *a = lc_newdeque(L);
+  *a = lc_newdeque();
   luaL_setmetatable(L, "containers_deque");
   return 1;
 }
@@ -267,7 +267,7 @@ static int deque_tostring(lua_State *L)
 {
   lc_set *a = lua_touserdata(L, 1);
   int *refs;
-  int len = lc_deque_torefarray(*a, &refs);
+  unsigned len = lc_deque_torefarray(*a, &refs);
   refarray_to_string(L, "< deque", refs, len);
   free(refs);
   return 1;

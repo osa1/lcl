@@ -28,7 +28,7 @@ EXTERNC void      lc_set_finalize(lc_set set);
 EXTERNC unsigned  lc_set_torefarray(lc_set set, int **arr);
 
 
-EXTERNC lc_deque  lc_newdeque(lua_State *L);
+EXTERNC lc_deque  lc_newdeque();
 EXTERNC unsigned  lc_deque_size(lc_deque deque);
 EXTERNC int       lc_deque_front(lc_deque deque);
 EXTERNC int       lc_deque_back(lc_deque deque);

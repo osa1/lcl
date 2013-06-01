@@ -1,10 +1,10 @@
 LUA_INSTALL = /home/omer/opt/lua-5.2.2/install
 
 CPP = clang++
-CPPFLAGS = -g -std=c++11 -Wall -Iinclude -I$(LUA_INSTALL)/include/
+CPPFLAGS = -g -std=c++11 -Wall -Wextra -Wpedantic -Iinclude -I$(LUA_INSTALL)/include/
 
 CC  = clang
-CCFLAGS = -g -Wall -Iinclude -I$(LUA_INSTALL)/include/
+CCFLAGS = -g -Wall -Wextra -Wpedantic -Iinclude -I$(LUA_INSTALL)/include/
 
 LDFLAGS = -L$(LUA_INSTALL)/lib/ -llua -lm -ldl
 

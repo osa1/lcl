@@ -93,7 +93,7 @@ void lc_set_finalize(lc_set s)
   delete s1;
 }
 
-lc_deque lc_newdeque(lua_State *L)
+lc_deque lc_newdeque()
 {
   return new deque<int>();
 }
