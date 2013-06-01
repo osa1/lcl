@@ -49,7 +49,7 @@ set:insert(Point(0, 4))
 print("set:", set)
 
 while set:size() ~= 0 do
-    print(set:pop():dist())
+    print(set:pop())
 end
 
 -- this should behave like max heap
