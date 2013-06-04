@@ -7,22 +7,19 @@ CCFLAGS = -g -Wall -Wextra -Wpedantic -Iinclude -I$(LUA_INSTALL)/include/
 LDFLAGS = -L$(LUA_INSTALL)/lib/ -llua -lm -ldl
 
 OBJS = main.o containers.o
-SOBJS = liblcl.so containers.so
+SOBJS = liblcl.so
 
-liblcl.so: containers.so main.c
-	$(CC) $(CCFLAGS) -shared -rdynamic -fPIC main.c -o liblcl.so
+liblcl.so: containers.o main.o
+	$(CC) $(CCFLAGS) -shared -rdynamic -fPIC -lstdc++ $^ -o $@
 
 main: containers.o main.o
 	$(CC) $^ -o main $(LDFLAGS) -lstdc++
 
 containers.o: src/containers.cpp
-	$(CPP) $(CPPFLAGS) -c $<
+	$(CPP) $(CPPFLAGS) -fPIC -c $<
 
 main.o: main.c
-	$(CC) $(CCFLAGS) -c $<
-
-containers.so: src/containers.cpp
-	$(CPP) $(CPPFLAGS) -shared -rdynamic -fPIC  $< -o containers.so
+	$(CC) $(CCFLAGS) -fPIC -c $<
 
 clean:
 	-rm $(OBJS)

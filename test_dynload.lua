@@ -1,6 +1,5 @@
 print("\n---- dynamic load test ----")
 
-print(package.loadlib("/home/omer/cpp/lua-containers/containers.so", "*"))
 package.loadlib("/home/omer/cpp/lua-containers/liblcl.so", "luaopen_containerlib")()
 
 Point = {}

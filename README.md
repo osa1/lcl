@@ -8,9 +8,7 @@ This library is only tested on my 64bit linux system, please tell me( @sinan1111
 
 ## Usage
 
-Until I find a way to generate only one .so file, you need to generate two .so files, and load them from Lua.
-
-See `lua_dynload.lua` file as an example. Output is in `lua_dynload.output` file.
+You need to load `liblcl.so` file with `package.loadlib` Lua function. See `lua_dynload.lua` file as an example. Output is in `lua_dynload.output` file.
 
 ## Installation
 
@@ -22,12 +20,11 @@ You should set three variables in `Makefile`:
 * `CPP`: C++ compiler
 * `CC`: C compiler
 
-After setting the variables, `make` should generate required `.so` files. Then you should load them like in `lua_dynload.lua` example(line 3 and 4).
+After setting the variables, `make` should generate required `.so` file(`liblcl.so`). Then you should load `liblcl.so` like in `lua_dynload.lua` example(line 3).
 
 ## TODO
 
 * Write a configure script to set CC, CPP and LUA_INSTALL variables in Makefile.
-* Find a way to generate only one `.so` file.
 * Check what happens when read/pop from an empty container. Return a consistent value in that situations.
 * Add more containers?
 * Tests.
