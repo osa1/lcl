@@ -1,6 +1,6 @@
 print("\n---- dynamic load test ----")
 
-package.loadlib("/home/omer/cpp/lua-containers/liblcl.so", "luaopen_containerlib")()
+package.loadlib("../liblcl.so", "luaopen_containerlib")()
 
 Point = {}
 Point.__index = Point

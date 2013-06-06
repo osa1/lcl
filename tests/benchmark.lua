@@ -1,4 +1,4 @@
-package.loadlib("/home/omer/cpp/lua-containers/liblcl.so", "luaopen_containerlib")()
+package.loadlib("../liblcl.so", "luaopen_containerlib")()
 
 max = 1000000
 
