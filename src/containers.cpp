@@ -1,5 +1,7 @@
 #include "containers.h"
 
+#include <cstdlib>
+
 #include <algorithm>
 #include <deque>
 #include <set>
@@ -101,7 +103,7 @@ int lc_set_pop(lc_set s)
 unsigned lc_set_torefarray(lc_set s, int **arr)
 {
   auto s1 = static_cast<Set*>(s);
-  *arr = new int[s1->stl_set->size()];
+  *arr = static_cast<int*>(malloc(sizeof(int) * s1->stl_set->size()));
   int arridx = 0;
   for (int r : *s1->stl_set)
     (*arr)[arridx++] = r;
@@ -185,7 +187,7 @@ void lc_deque_finalize(lc_deque d)
 unsigned lc_deque_torefarray(lc_deque d, int **arr)
 {
   auto d1 = static_cast<deque<int>*>(d);
-  *arr = new int[d1->size()];
+  *arr = static_cast<int*>(malloc(sizeof(int) * d1->size()));
   int arridx = 0;
   for (int r : *d1)
     (*arr)[arridx++] = r;
