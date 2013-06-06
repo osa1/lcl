@@ -25,11 +25,11 @@ public:
       lua_rawgeti(L, LUA_REGISTRYINDEX, i2);
       lua_call(L, 2, 1);
       r = lua_toboolean(L, -1);
-      lua_pop(L, 1);
     } else {
       lua_rawgeti(L, LUA_REGISTRYINDEX, i1);
       lua_rawgeti(L, LUA_REGISTRYINDEX, i2);
       r = lua_compare(L, -2, -1, LUA_OPLT);
+      lua_pop(L, 2);
     }
     if (r == 1)
       return true;
