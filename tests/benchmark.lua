@@ -8,9 +8,12 @@ for i=1, max do
 end
 
 deque = Deque()
+set = Set()
 tbl = {}
 
 local start_clk, end_clk
+
+print("insertions:")
 
 -- add to deque
 start_clk = os.clock()
@@ -28,6 +31,16 @@ end
 end_clk = os.clock()
 print("table insert time:", end_clk - start_clk)
 
+-- add to set
+start_clk = os.clock()
+for i=1, max do
+    set:insert(randoms[i])
+end
+end_clk = os.clock()
+print("set insert time:", end_clk - start_clk)
+
+
+print("\nsorting:")
 
 -- sort deque
 start_clk = os.clock()

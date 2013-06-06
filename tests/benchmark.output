@@ -1,4 +1,8 @@
-deque push_back time:	0.4
+insertions:
+deque push_back time:	0.42
 table insert time:	0.29
-deque sort time:	1.47
-table sort time:	0.66
+set insert time:	1.28
+
+sorting:
+deque sort time:	1.49
+table sort time:	0.65
