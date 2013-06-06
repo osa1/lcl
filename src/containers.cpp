@@ -35,62 +35,82 @@ public:
   }
 };
 
+typedef set<int, LuaComparator> LuaSTLSet;
+
+class Set
+{
+  lua_State *L;
+  int comparator_ref;
+public:
+  LuaSTLSet *stl_set;
+  Set(lua_State *L, LuaSTLSet *stl_set)
+    : L(L), comparator_ref(-1), stl_set(stl_set) {}
+  Set(lua_State *L, LuaSTLSet *stl_set, int comparator_ref)
+    : L(L), comparator_ref(comparator_ref), stl_set(stl_set) {}
+  virtual ~Set()
+  {
+    if (comparator_ref != -1)
+      luaL_unref(L, LUA_REGISTRYINDEX, comparator_ref);
+    delete stl_set;
+  }
+};
+
 lc_set lc_newset(lua_State *L)
 {
-  return new set<int, LuaComparator>(LuaComparator(L));
+  return new Set(L, new set<int, LuaComparator>(LuaComparator(L)));
 }
 
 lc_set lc_newset_w_comp(lua_State *L, int funref)
 {
-  return new set<int, LuaComparator>(LuaComparator(L, funref));
+  return new Set(L, new set<int, LuaComparator>(LuaComparator(L, funref)), funref);
 }
 
 int lc_set_count(lc_set s, int e)
 {
-  auto s1 = static_cast<set<int, LuaComparator>*>(s);
-  return s1->count(e);
+  auto s1 = static_cast<Set*>(s);
+  return s1->stl_set->count(e);
 }
 
 void lc_set_insert(lc_set s, int e)
 {
-  auto s1 = static_cast<set<int, LuaComparator>*>(s);
-  s1->insert(e);
+  auto s1 = static_cast<Set*>(s);
+  s1->stl_set->insert(e);
 }
 
 unsigned lc_set_size(lc_set s)
 {
-  auto s1 = static_cast<set<int, LuaComparator>*>(s);
-  return s1->size();
+  auto s1 = static_cast<Set*>(s);
+  return s1->stl_set->size();
 }
 
 int lc_set_top(lc_set s)
 {
-  auto s1 = static_cast<set<int, LuaComparator>*>(s);
-  return *s1->begin();
+  auto s1 = static_cast<Set*>(s);
+  return *s1->stl_set->begin();
 }
 
 int lc_set_pop(lc_set s)
 {
-  auto s1 = static_cast<set<int, LuaComparator>*>(s);
+  auto s1 = static_cast<Set*>(s);
   // TODO: set should not be empty
-  int ret = *s1->begin();
-  s1->erase(s1->begin());
+  int ret = *s1->stl_set->begin();
+  s1->stl_set->erase(s1->stl_set->begin());
   return ret;
 }
 
 unsigned lc_set_torefarray(lc_set s, int **arr)
 {
-  auto s1 = static_cast<set<int, LuaComparator>*>(s);
-  *arr = new int[s1->size()];
+  auto s1 = static_cast<Set*>(s);
+  *arr = new int[s1->stl_set->size()];
   int arridx = 0;
-  for (int r : *s1)
+  for (int r : *s1->stl_set)
     (*arr)[arridx++] = r;
-  return s1->size();
+  return s1->stl_set->size();
 }
 
 void lc_set_finalize(lc_set s)
 {
-  auto s1 = static_cast<set<int, LuaComparator>*>(s);
+  auto s1 = static_cast<Set*>(s);
   delete s1;
 }
 
