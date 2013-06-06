@@ -273,6 +273,22 @@ static int deque_tostring(lua_State *L)
   return 1;
 }
 
+static int deque_sort(lua_State *L)
+{
+  int stack_depth = lua_gettop(L);
+  if (stack_depth == 1) {
+    lc_set *a = lua_touserdata(L, 1);
+    lc_deque_sort(L, *a);
+  } else {
+    luaL_checktype(L, -1, LUA_TFUNCTION);
+    int funref = luaL_ref(L, LUA_REGISTRYINDEX);
+    lc_set *a = lua_touserdata(L, -1);
+    lc_deque_sort_w_comp(L, *a, funref);
+    luaL_unref(L, LUA_REGISTRYINDEX, funref);
+  }
+  return 0;
+}
+
 static const struct luaL_Reg containerlib_set [] = {
   {"new", set_new},
   {"count", set_count},
@@ -300,6 +316,7 @@ static const struct luaL_Reg containerlib_deque [] = {
   {"push_back", deque_push_back},
   {"pop_front", deque_pop_front},
   {"pop_back", deque_pop_back},
+  {"sort", deque_sort},
   {"__gc", deque_gc},
   {"__tostring", deque_tostring},
   {NULL, NULL}

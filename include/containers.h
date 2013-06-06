@@ -39,5 +39,7 @@ EXTERNC int       lc_deque_pop_front(lc_deque deque);
 EXTERNC int       lc_deque_pop_back(lc_deque deque);
 EXTERNC void      lc_deque_finalize(lc_deque deque);
 EXTERNC unsigned  lc_deque_torefarray(lc_deque deque, int **arr);
+EXTERNC void      lc_deque_sort(lua_State *L, lc_deque deque);
+EXTERNC void      lc_deque_sort_w_comp(lua_State *L, lc_deque d, int funref);
 
 #undef EXTERNC

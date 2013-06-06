@@ -1,5 +1,6 @@
 #include "containers.h"
 
+#include <algorithm>
 #include <deque>
 #include <set>
 
@@ -169,4 +170,16 @@ unsigned lc_deque_torefarray(lc_deque d, int **arr)
   for (int r : *d1)
     (*arr)[arridx++] = r;
   return d1->size();
+}
+
+void lc_deque_sort(lua_State *L, lc_deque d)
+{
+  auto d1 = static_cast<deque<int>*>(d);
+  sort(d1->begin(), d1->end(), LuaComparator(L));
+}
+
+void lc_deque_sort_w_comp(lua_State *L, lc_deque d, int funref)
+{
+  auto d1 = static_cast<deque<int>*>(d);
+  sort(d1->begin(), d1->end(), LuaComparator(L, funref));
 }

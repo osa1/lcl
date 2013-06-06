@@ -88,6 +88,13 @@ deque:insert(1, 20)
 deque:insert(2, 30)
 
 print("deque:", deque)
+deque:sort()
+print("deque after sort:", deque)
+comparator = function (i1, i2)
+    return i1 > i2
+end
+deque:sort(comparator)
+print("deque after sort in reverse:", deque)
 
 print("deque size:", deque:size())
 while deque:size() ~= 0 do
