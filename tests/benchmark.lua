@@ -39,6 +39,19 @@ end
 end_clk = os.clock()
 print("set insert time:", end_clk - start_clk)
 
+-- randomized insertion to deque
+deque = Deque()
+start_clk = os.clock()
+for i=1, max do
+    if (math.random() < 0.5) then
+        deque:push_front(randoms[i])
+    else
+        deque:push_back(randoms[i])
+    end
+end
+end_clk = os.clock()
+print("deque randomized insert time:", end_clk - start_clk)
+
 
 print("\nsorting:")
 
