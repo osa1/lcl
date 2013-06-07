@@ -363,7 +363,7 @@ int luaopen_containerlib(lua_State *L)
 {
   loadlib(L, "Set", "containers_set", containerlib_set, containerlib_set_mt);
   loadlib(L, "Deque", "containers_deque", containerlib_deque, containerlib_deque_mt);
-  return 1;
+  return 0;
 }
 
 void error(lua_State *L, const char *fmt, ...)
