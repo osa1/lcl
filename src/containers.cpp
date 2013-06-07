@@ -28,7 +28,13 @@ public:
     } else {
       lua_rawgeti(L, LUA_REGISTRYINDEX, i1);
       lua_rawgeti(L, LUA_REGISTRYINDEX, i2);
+
+#if LUA_VERSION_NUM == 501
+      r = lua_lessthan(L, -2, -1);
+#else
       r = lua_compare(L, -2, -1, LUA_OPLT);
+#endif
+
       lua_pop(L, 2);
     }
     if (r == 1)

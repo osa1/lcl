@@ -6,6 +6,12 @@
 #include "lauxlib.h"
 #include "lualib.h"
 
+#if LUA_VERSION_NUM == 501
+void luaL_setmetatable(lua_State *L, const char *tname) {
+  luaL_getmetatable(L, tname);
+  lua_setmetatable(L, -2);
+}
+#endif
 
 // used for debugging purposes
 static void stackdump(lua_State *L)
@@ -333,11 +339,21 @@ static void loadlib(lua_State *L, const char *global_name,
   luaL_newmetatable(L, mt_name);
   lua_pushvalue(L, -1);
   lua_setfield(L, -2, "__index");
+
+#if LUA_VERSION_NUM == 501
+  luaL_register(L, NULL, funs);
+#else
   luaL_setfuncs(L, funs, 0);
+#endif
 
   // setmetatable(mt_name, { __call = ... })
   lua_newtable(L);
+#if LUA_VERSION_NUM == 501
+  luaL_register(L, NULL, mt_funs);
+#else
   luaL_setfuncs(L, mt_funs, 0);
+#endif
+
   lua_setmetatable(L, 1);
 
   lua_setglobal(L, global_name);
