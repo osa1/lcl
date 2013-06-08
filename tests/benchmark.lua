@@ -1,5 +1,7 @@
 package.loadlib("../liblcl.so", "luaopen_containerlib")()
 
+tableDeque = require "deque"
+
 max = 1000000
 
 randoms = {}
@@ -8,6 +10,7 @@ for i=1, max do
 end
 
 deque = Deque()
+tbl_deque = tableDeque()
 set = Set()
 tbl = {}
 tbl_set = {}
@@ -23,6 +26,15 @@ for i=1, max do
 end
 end_clk = getMicroTime()
 print("deque push_back time:", end_clk - start_clk)
+
+-- add to table deque
+tbl_deque = tableDeque()
+start_clk = getMicroTime()
+for i=1, max do
+    tbl_deque:push_back(randoms[i])
+end
+end_clk = getMicroTime()
+print("table deque push_back time:", end_clk - start_clk)
 
 -- add to table
 start_clk = getMicroTime()
@@ -60,6 +72,19 @@ for i=1, max do
 end
 end_clk = getMicroTime()
 print("deque randomized insert time:", end_clk - start_clk)
+
+-- randomized insertion to table deque
+tbl_deque = tableDeque()
+start_clk = getMicroTime()
+for i=1, max do
+    if (math.random() < 0.5) then
+        tbl_deque:push_front(randoms[i])
+    else
+        tbl_deque:push_back(randoms[i])
+    end
+end
+end_clk = getMicroTime()
+print("table deque randomized insert time:", end_clk - start_clk)
 
 
 
