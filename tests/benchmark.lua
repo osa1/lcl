@@ -17,40 +17,40 @@ local start_clk, end_clk
 print("insertions:")
 
 -- add to deque
-start_clk = os.clock()
+start_clk = getMicroTime()
 for i=1, max do
     deque:push_back(randoms[i])
 end
-end_clk = os.clock()
+end_clk = getMicroTime()
 print("deque push_back time:", end_clk - start_clk)
 
 -- add to table
-start_clk = os.clock()
+start_clk = getMicroTime()
 for i=1, max do
     table.insert(tbl, randoms[i])
 end
-end_clk = os.clock()
+end_clk = getMicroTime()
 print("table insert time:", end_clk - start_clk)
 
 -- add to set
-start_clk = os.clock()
+start_clk = getMicroTime()
 for i=1, max do
     set:insert(randoms[i])
 end
-end_clk = os.clock()
+end_clk = getMicroTime()
 print("set insert time:", end_clk - start_clk)
 
 -- add to table set
-start_clk = os.clock()
+start_clk = getMicroTime()
 for i=1, max do
     tbl_set[randoms[i]] = true
 end
-end_clk = os.clock()
+end_clk = getMicroTime()
 print("table set insert time:", end_clk - start_clk)
 
 -- randomized insertion to deque
 deque = Deque()
-start_clk = os.clock()
+start_clk = getMicroTime()
 for i=1, max do
     if (math.random() < 0.5) then
         deque:push_front(randoms[i])
@@ -58,7 +58,7 @@ for i=1, max do
         deque:push_back(randoms[i])
     end
 end
-end_clk = os.clock()
+end_clk = getMicroTime()
 print("deque randomized insert time:", end_clk - start_clk)
 
 
@@ -66,19 +66,19 @@ print("deque randomized insert time:", end_clk - start_clk)
 print("\nrandom access to sets:")
 
 -- lcl set
-start_clk = os.clock()
+start_clk = getMicroTime()
 for i=1, max do
     assert(set:count(randoms[i]) ~= 0)
 end
-end_clk = os.clock()
+end_clk = getMicroTime()
 print("lcl set random access time:", end_clk - start_clk)
 
 -- table set
-start_clk = os.clock()
+start_clk = getMicroTime()
 for i=1, max do
     assert(tbl_set[randoms[i]] ~= 0)
 end
-end_clk = os.clock()
+end_clk = getMicroTime()
 print("table set random access time:", end_clk - start_clk)
 
 
@@ -86,13 +86,13 @@ print("table set random access time:", end_clk - start_clk)
 print("\nsorting:")
 
 -- sort deque
-start_clk = os.clock()
+start_clk = getMicroTime()
 deque:sort()
-end_clk = os.clock()
+end_clk = getMicroTime()
 print("deque sort time:", end_clk - start_clk)
 
 -- sort table
-start_clk = os.clock()
+start_clk = getMicroTime()
 table.sort(tbl)
-end_clk = os.clock()
+end_clk = getMicroTime()
 print("table sort time:", end_clk - start_clk)

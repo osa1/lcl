@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/time.h>
 #include "containers.h"
 
 #include "lua.h"
@@ -45,6 +46,14 @@ static void stackdump(lua_State *L)
     printf("  ");
   }
   printf("\n");
+}
+
+static int getmicrotime(lua_State *L)
+{
+  struct timeval t;
+  gettimeofday(&t, NULL);
+  lua_pushnumber(L, t.tv_sec + t.tv_usec/1000000.0);
+  return 1;
 }
 
 static void refarray_to_string(lua_State *L, const char *cname, int *refs, unsigned len)
@@ -363,6 +372,8 @@ int luaopen_containerlib(lua_State *L)
 {
   loadlib(L, "Set", "containers_set", containerlib_set, containerlib_set_mt);
   loadlib(L, "Deque", "containers_deque", containerlib_deque, containerlib_deque_mt);
+  lua_pushcfunction(L, getmicrotime);
+  lua_setglobal(L, "getMicroTime");
   return 0;
 }
 
