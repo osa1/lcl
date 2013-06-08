@@ -55,7 +55,12 @@ print("set insert time:", end_clk - start_clk)
 -- add to table set
 start_clk = getMicroTime()
 for i=1, max do
-    tbl_set[randoms[i]] = true
+    local e = tbl_set[randoms[i]]
+    if e == nil then
+        tbl_set[randoms[i]] = 1
+    else
+        tbl_set[randoms[i]] = e + 1
+    end
 end
 end_clk = getMicroTime()
 print("table set insert time:", end_clk - start_clk)

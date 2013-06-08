@@ -1,16 +1,16 @@
 insertions:
-deque push_back time:	0.22053122520447
-table deque push_back time:	0.25747203826904
-table insert time:	0.1065411567688
-set insert time:	0.75197601318359
-table set insert time:	0.0027341842651367
-deque randomized insert time:	0.35162806510925
-table deque randomized insert time:	0.34269618988037
+deque push_back time:	0.21832299232483
+table deque push_back time:	0.25276398658752
+table insert time:	0.10486888885498
+set insert time:	0.75788998603821
+table set insert time:	0.0037779808044434
+deque randomized insert time:	0.33370518684387
+table deque randomized insert time:	0.33893799781799
 
 random access to sets:
-lcl set random access time:	0.82329416275024
-table set random access time:	0.0024960041046143
+lcl set random access time:	0.81087112426758
+table set random access time:	0.0033140182495117
 
 sorting:
-deque sort time:	0.87109208106995
-table sort time:	0.64775013923645
+deque sort time:	0.8484148979187
+table sort time:	0.6419529914856
