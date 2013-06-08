@@ -1,9 +1,14 @@
 insertions:
-deque push_back time:	0.37
-table insert time:	0.28
-set insert time:	1.01
+deque push_back time:	0.35
+table insert time:	0.29
+set insert time:	0.97
+table set insert time:	0.07
 deque randomized insert time:	0.56
 
+random access to sets:
+lcl set random access time:	1.13
+table set random access time:	0.13
+
 sorting:
-deque sort time:	1.08
-table sort time:	0.69
+deque sort time:	1.05
+table sort time:	0.68

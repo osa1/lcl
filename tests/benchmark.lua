@@ -10,6 +10,7 @@ end
 deque = Deque()
 set = Set()
 tbl = {}
+tbl_set = {}
 
 local start_clk, end_clk
 
@@ -39,6 +40,14 @@ end
 end_clk = os.clock()
 print("set insert time:", end_clk - start_clk)
 
+-- add to table set
+start_clk = os.clock()
+for i=1, max do
+    tbl_set[randoms[i]] = true
+end
+end_clk = os.clock()
+print("table set insert time:", end_clk - start_clk)
+
 -- randomized insertion to deque
 deque = Deque()
 start_clk = os.clock()
@@ -51,6 +60,27 @@ for i=1, max do
 end
 end_clk = os.clock()
 print("deque randomized insert time:", end_clk - start_clk)
+
+
+
+print("\nrandom access to sets:")
+
+-- lcl set
+start_clk = os.clock()
+for i=1, max do
+    assert(set:count(randoms[i]) ~= 0)
+end
+end_clk = os.clock()
+print("lcl set random access time:", end_clk - start_clk)
+
+-- table set
+start_clk = os.clock()
+for i=1, max do
+    assert(tbl_set[randoms[i]] ~= 0)
+end
+end_clk = os.clock()
+print("table set random access time:", end_clk - start_clk)
+
 
 
 print("\nsorting:")
