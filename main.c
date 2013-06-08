@@ -392,13 +392,3 @@ void load(lua_State *L, const char *fname)
   if (luaL_loadfile(L, fname) || lua_pcall(L, 0, 0, 0))
     error(L, "cannot run file: %s", lua_tostring(L, -1));
 }
-
-int main()
-{
-  lua_State *L = luaL_newstate();
-  luaL_openlibs(L);
-  luaopen_containerlib(L);
-  load(L, "tests/test_main.lua");
-  lua_close(L);
-  return 0;
-}
